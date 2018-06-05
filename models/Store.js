@@ -43,17 +43,19 @@ storeSchema.pre('save', async function(next) {
   this.slug = slug(this.name);
   // find other stores that have a slug of wes, wes-1, wes-2
   const slugRegEx = new RegExp(`^(${this.slug})((-[0-9]*$)?)$`, 'i');
-  const storesWithSlug = await this.constructor.find({ slug: slugRegEx });
+  const storesWithSlug = await this.constructor.find({slug: slugRegEx});
   if (storesWithSlug.length) {
     this.slug = `${this.slug}-${storesWithSlug.length + 1}`;
   }
   next();
-  // TODO make more resiliant so slugs are unique
 });
 
 storeSchema.statics.getTagsList = function() {
   return this.aggregate([
-    { $unwind: '$tags' },
+    /* unwind will give us the [duplicate] Stores for each tag. For exmaple, 
+    Tim Hortons will be unwound twice because it has Wifi & it's Family Friendly */
+    { $unwind: '$tags' }, 
+    // group the stores by their tags, and create a new field called count
     { $group: { _id: '$tags', count: { $sum: 1 } } },
     { $sort: { count: -1 } }
   ]);
