@@ -437,13 +437,13 @@ html {
 
 body {
   font-size: 1.5rem;
-  color: #303030; }
+  color: #303030;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
 
 h1, h2, h3, h4, h5, h6 {
   font-size: 5rem;
-  font-family: 'Panama';
-  font-weight: 600;
-  letter-spacing: -1px; }
+  font-family: 'Soda Fountain';
+  letter-spacing: 1px; }
 
 a {
   text-decoration: none;
@@ -482,7 +482,8 @@ p {
         transform: skew(-5deg); }
   .title a {
     border-bottom: 0;
-    background-image: linear-gradient(to right, rgba(255, 196, 14, 0.8) 100%, rgba(255, 196, 14, 0.8) 50%); }
+    padding: .2em;
+    background-image: linear-gradient(to right, #ffc40e 100%, #ffc40e 50%); }
 
 .title--single {
   max-width: 600px;
