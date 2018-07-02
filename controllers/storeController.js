@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Store = mongoose.model('Store');
+const User = mongoose.model('User');
 const multer = require('multer');
 const jimp = require('jimp');
 const uuid = require('uuid');
@@ -118,4 +119,38 @@ exports.searchStores = async (req, res) => {
     .limit(5);
     
   res.json(stores);
+}
+
+exports.mapStores = async (req, res) => {
+  const coordinates = [req.query.lng, req.query.lat].map(parseFloat);
+  const q = {
+    location: {
+      $near: {
+        $geometry: {
+          type: 'Point',
+          coordinates
+        },
+        $maxDistance: 10000 // 10km
+      }
+    }
+  };
+
+  const stores = await Store.find(q).select('slug name description location photo').limit(10);
+  res.json(stores);
+}
+
+exports.heartStore = async (req, res) => {
+  const hearts = req.user.hearts.map(obj => obj.toString());
+  // check if user has a heart for this store
+  const operator = hearts.includes(req.params.id) ? `$pull` : `$addToSet`;
+  const user = await User.findByIdAndUpdate(req.user._id,
+    // operator toggles the heart
+    { [operator]: { hearts: req.params.id }},
+    { new: true } // returns the new document
+  );
+  res.json(user);
+}
+
+exports.mapPage = (req, res) => {
+  res.render('map', {title: 'Map'});
 }
