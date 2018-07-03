@@ -154,3 +154,14 @@ exports.heartStore = async (req, res) => {
 exports.mapPage = (req, res) => {
   res.render('map', {title: 'Map'});
 }
+
+exports.getHearts = async (req, res) => {
+  /* 
+  option A - query current user and call .populate on hearts
+  option B - query stores and find stores whos id is in hearts array
+  */
+  const stores = await Store.find({
+    _id: { $in: req.user.hearts }
+  });
+  res.render('stores', { stores, title: 'Hearted'});
+}
