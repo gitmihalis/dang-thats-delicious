@@ -85,7 +85,7 @@ exports.updateStore = async (req, res) => {
 };
 
 exports.getStoreBySlug = async (req, res, next) => {
-  const store = await Store.findOne({ slug: req.params.slug }).populate('author');
+  const store = await Store.findOne({ slug: req.params.slug }).populate('author reviews');
   if (!store) return next();
   res.render('store', { store, title: store.name });
 };
@@ -164,4 +164,11 @@ exports.getHearts = async (req, res) => {
     _id: { $in: req.user.hearts }
   });
   res.render('stores', { stores, title: 'Hearted'});
+}
+
+exports.getTopStores = async (req, res) => {
+  const stores = await Store.getTopStores(); //TODO create the method on the model
+  // res.json(stores);
+  res.render('topStores', { stores, title: '★ Top Stores'});
+
 }
