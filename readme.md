@@ -1,6 +1,6 @@
 ## What is this?
 
-A full features Express application learned from Wes Bos' Learn Node course!
+A full featured Express application learned from Wes Bos' Learn Node course!
 
 ## Sample Data
 
